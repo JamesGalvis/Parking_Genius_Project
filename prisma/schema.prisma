@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  EMPLOYEE
+}
+
+model ParkingLot {
+  id                String            @id @default(cuid())
+  name              String            @unique // Nombre del parqueadero
+  users             User[] // Relación con usuarios (administradores y empleados)
+  vehicleCategories VehicleCategory[] // Relación con categorías de vehículos
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  password      String?
+  phone         String?
+  image         String?
+  role          UserRole  @default(EMPLOYEE)
+
+  parkingLotId String?
+  parkingLot   ParkingLot? @relation(fields: [parkingLotId], references: [id])
+
+  accounts Account[]
+  shifts   Shift[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Shift {
+  id String @id @default(cuid())
+
+  userId String // Relaciona con un empleado
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  dayOfWeek Int // 0: Domingo, 1: Lunes, 2: Martes, ..., 6: Sábado
+  startTime DateTime // Hora de inicio del turno
+  endTime   DateTime // Hora de fin del turno
+}
+
+model VehicleCategory {
+  id    String @id @default(cuid())
+  name  String @unique // Nombre de la categoría, debe ser único
+  monthlyRate    Float   // tarifa para clientes mensuales
+  fractionalRate Float   // tarifa para clientes por fracción/hora
+
+
+  parkingLotId String
+  parkingLot   ParkingLot @relation(fields: [parkingLotId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name]) // Validación adicional para asegurar que no haya duplicados
+}
