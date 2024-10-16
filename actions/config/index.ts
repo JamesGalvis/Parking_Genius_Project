@@ -142,3 +142,61 @@ export async function updateCategory(
     return { error: "Hubo un error al crear la categoría." }
   }
 }
+
+export async function linkCodeToParkingLot(
+  parkingLotId: string,
+  code: string,
+  codeValidationTime: Date
+) {
+  try {
+    // Verifica si el parqueadero existe
+    const existingParking = await db.parkingLot.findUnique({
+      where: { id: parkingLotId },
+    })
+
+    if (!existingParking) {
+      return { error: "La categoría no existe." }
+    }
+
+    // Agreagr el codigo de vinculación
+    await db.parkingLot.update({
+      where: { id: parkingLotId },
+      data: { linkCode: code, codeValidationTime },
+    })
+
+    // Revalida la ruta para actualizar los datos en el frontend
+    revalidatePath(`/profile`)
+
+    return { success: "Codigo creado exitosamente." }
+  } catch {
+    return { error: "Hubo un error al crear el código." }
+  }
+}
+
+export async function deleteCode(
+  parkingLotId: string
+) {
+  try {
+    // Verifica si el parqueadero existe
+    const existingParking = await db.parkingLot.findUnique({
+      where: { id: parkingLotId },
+    })
+
+    if (!existingParking) {
+      return { error: "La categoría no existe." }
+    }
+
+    // Limpiar el codigo de vinculación
+    await db.parkingLot.update({
+      where: { id: parkingLotId },
+      data: { linkCode: null, codeValidationTime: null },
+    })
+
+    // Revalida la ruta para actualizar los datos en el frontend
+    revalidatePath(`/profile`)
+
+    return { success: "Codigo eliminado exitosamente." }
+  } catch {
+    return { error: "Hubo un error al crear el código." }
+  }
+}

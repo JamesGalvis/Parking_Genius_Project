@@ -35,6 +35,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 
 interface Category {
   id: string
@@ -56,6 +57,8 @@ export default function ParkingConfigStepper({
   vehicles,
   existingParking,
 }: ParkingConfigStepperProps) {
+  const router = useRouter()
+
   const [step, setStep] = useState(existingParking ? 2 : 1)
   const [isCreatingParking, startTransitionToCreate] = useTransition()
 
@@ -187,6 +190,7 @@ export default function ParkingConfigStepper({
   return (
     <>
       <Button
+        onClick={() => router.push("/dashboard")}
         className={cn(
           "absolute top-4 right-4",
           vehicles?.length === 0 && "hidden"

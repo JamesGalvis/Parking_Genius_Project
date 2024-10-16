@@ -59,6 +59,10 @@ export const profileTabs: {
     value: "schedule",
     label: "Horario",
   },
+  {
+    value: "codes",
+    label: "Generador de códigos",
+  },
 ]
 
 export const shifts: {

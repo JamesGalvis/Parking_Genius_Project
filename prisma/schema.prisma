@@ -19,10 +19,12 @@ enum UserRole {
 }
 
 model ParkingLot {
-  id                String            @id @default(cuid())
-  name              String            @unique // Nombre del parqueadero
-  users             User[] // Relación con usuarios (administradores y empleados)
-  vehicleCategories VehicleCategory[] // Relación con categorías de vehículos
+  id                 String            @id @default(cuid())
+  name               String            @unique // Nombre del parqueadero
+  users              User[] // Relación con usuarios (administradores y empleados)
+  vehicleCategories  VehicleCategory[] // Relación con categorías de vehículos
+  linkCode           String?
+  codeValidationTime DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -81,11 +83,10 @@ model Shift {
 }
 
 model VehicleCategory {
-  id    String @id @default(cuid())
-  name  String @unique // Nombre de la categoría, debe ser único
-  monthlyRate    Float   // tarifa para clientes mensuales
-  fractionalRate Float   // tarifa para clientes por fracción/hora
-
+  id             String @id @default(cuid())
+  name           String @unique // Nombre de la categoría, debe ser único
+  monthlyRate    Float // tarifa para clientes mensuales
+  fractionalRate Float // tarifa para clientes por fracción/hora
 
   parkingLotId String
   parkingLot   ParkingLot @relation(fields: [parkingLotId], references: [id])

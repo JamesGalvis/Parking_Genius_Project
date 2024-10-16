@@ -7,6 +7,9 @@ import { ProfileHeader } from "@/components/employees/profile/profile-header"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Schedule } from "@/components/employees/profile/schedule"
 import { profileTabs } from "@/constants"
+import CodesGenerator from "@/components/common/codes-generator"
+import { cn } from "@/lib/utils"
+import { getParkingLotByUser } from "@/actions/config"
 
 interface ProfilePageProps {
   params: { userId: string }
@@ -14,6 +17,7 @@ interface ProfilePageProps {
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const user = await getUserById(params.userId)
+  const parkingLot = await getParkingLotByUser()
 
   if (!user) {
     return notFound()
@@ -47,6 +51,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
         </TabsContent>
         <TabsContent value="schedule">
           <Schedule />
+        </TabsContent>
+        <TabsContent value="codes" className={cn(user.role === "ADMIN")}>
+          <CodesGenerator parkingLot={parkingLot!} />
         </TabsContent>
       </Tabs>
     </div>
