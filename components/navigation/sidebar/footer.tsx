@@ -55,7 +55,7 @@ export async function Footer() {
                   </div>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
+              {/* <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem>
                   <BadgeCheck className="size-4 mr-2" />
@@ -66,7 +66,7 @@ export async function Footer() {
                   <Bell className="size-4 mr-2" />
                   Notificaciones
                 </DropdownMenuItem>
-              </DropdownMenuGroup>
+              </DropdownMenuGroup> */}
               <DropdownMenuSeparator />
               <DropdownMenuItem className="p-0">
                 <LogoutButton />
