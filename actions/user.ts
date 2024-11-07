@@ -1,22 +1,22 @@
-"use server"
+"use server";
 
-import { db } from "@/lib/db"
+import { db } from "@/lib/db";
 
 export async function getUserByEmail(email: string) {
   try {
     const user = await db.user.findUnique({
       where: { email },
-    })
+    });
 
-    return user
+    return user;
   } catch (error) {
-    return null
+    return null;
   }
 }
 
 export const getUserById = async (id?: string) => {
   if (!id) {
-    return null
+    return null;
   }
 
   try {
@@ -24,10 +24,29 @@ export const getUserById = async (id?: string) => {
       where: {
         id,
       },
-    })
+    });
 
-    return userFound
+    return userFound;
   } catch (error) {
-    return null
+    return null;
+  }
+};
+
+export async function getUsers(currentUserId: string) {
+  try {
+    const users = await db.user.findMany({
+      where: {
+        role: {
+          not: "SuperAdmin",
+        },
+        id: {
+          not: currentUserId,
+        },
+      },
+    });
+
+    return users;
+  } catch {
+    return [];
   }
 }

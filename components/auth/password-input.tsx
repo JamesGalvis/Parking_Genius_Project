@@ -1,67 +1,74 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { ControllerRenderProps } from "react-hook-form"
-import { Eye, EyeOff } from "lucide-react"
+import { useState } from "react";
+import { ControllerRenderProps } from "react-hook-form";
+import { Eye, EyeOff } from "lucide-react";
 
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface PasswordInputProps {
-  isSubmitting: boolean
-  variant?: "default" | "largeRounded"
+  isSubmitting: boolean;
   field:
     | ControllerRenderProps<
         {
-          email: string
-          password: string
+          email: string;
+          password: string;
         },
         "password"
       >
     | ControllerRenderProps<
         {
-          email: string
-          password: string
-          name: string
-          phone: string
+          email: string;
+          name: string;
+          phone: string;
+          password?: string | undefined;
         },
         "password"
       >
     | ControllerRenderProps<
         {
-          oldPassword: string
-          newPassword: string
+          email: string;
+          name: string;
+          role: string;
+          phone: string;
+          password?: string | undefined;
+        },
+        "password"
+      >
+    | ControllerRenderProps<
+        {
+          oldPassword: string;
+          newPassword: string;
         },
         "oldPassword"
       >
     | ControllerRenderProps<
         {
-          oldPassword: string
-          newPassword: string
+          oldPassword: string;
+          newPassword: string;
         },
         "newPassword"
-      >
-  className?: string
-  showPlaceholder?: boolean
+      >;
+  className?: string;
+  placeholder?: string;
 }
 
 export function PasswordInput({
   isSubmitting,
-  variant = "default",
   field,
   className,
-  showPlaceholder = true,
+  placeholder,
 }: PasswordInputProps) {
-  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (
     <div className="relative flex items-center justify-between">
       <Input
-        variant={variant}
         className={cn("pr-11", className)}
         type={showPassword ? "text" : "password"}
-        placeholder={showPlaceholder ? "8+ caracteres" : ""}
+        placeholder={placeholder ?? "8+ caracteres"}
         disabled={isSubmitting}
         {...field}
       />
@@ -78,5 +85,5 @@ export function PasswordInput({
         )}
       </Button>
     </div>
-  )
+  );
 }

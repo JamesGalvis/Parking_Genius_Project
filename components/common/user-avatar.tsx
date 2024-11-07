@@ -1,48 +1,23 @@
-import { User } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-import { currentUser } from "@/lib/auth-user"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { cn } from "@/lib/utils"
-import { cva, VariantProps } from "class-variance-authority"
-
-const avatarSizes = cva("", {
-  variants: {
-    size: {
-      default: "size-10",
-      md: "size-12",
-      lg: "size-[68px]",
-      xl: "md:size-[120px] size-[80px]",
-      xxl: "md:size-[340px] size-72",
-    },
-  },
-})
-
-interface UserAvatarProps extends VariantProps<typeof avatarSizes> {
-  src?: string
-  own?: boolean
-  className?: string
-  fallbackClassName?: string
+interface UserAvatarProps {
+  src: string;
+  userName: string;
 }
 
-export async function UserAvatar({
-  src,
-  own,
-  className,
-  fallbackClassName,
-  size,
-}: UserAvatarProps) {
-  const loggedUser = await currentUser()
+export function UserAvatar({ src, userName }: UserAvatarProps) {
+  const initials = userName
+    .split(" ")
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join("");
 
   return (
-    <Avatar className={cn("size-9", className, avatarSizes({ size }))}>
-      <AvatarImage
-        src={own ? loggedUser?.image ?? "" : src}
-        alt="User image"
-        className="object-cover"
-      />
-      <AvatarFallback>
-        <User className={cn("size-2/5 shrink-0", fallbackClassName)} />
+    <Avatar className="h-8 w-8 rounded-lg">
+      <AvatarImage src={src} alt={userName} />
+      <AvatarFallback className="rounded-lg bg-gradient-to-r dark:from-stone-500 dark:to-stone-700 from-neutral-300 to-stone-400">
+        {initials}
       </AvatarFallback>
     </Avatar>
-  )
+  );
 }

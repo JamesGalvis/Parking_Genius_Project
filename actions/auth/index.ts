@@ -69,7 +69,7 @@ export async function register(
         name,
         email,
         phone,
-        role: userType ===  "administrador" ? "ADMIN" : "EMPLOYEE",
+        role: userType ===  "administrador" ? "SuperAdmin" : "Empleado",
         password: hashedPassword,
       },
     })

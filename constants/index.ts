@@ -1,37 +1,41 @@
-import {
-  CircleUser,
-  SquareUserRound,
-  UsersRound,
-  ChartColumnBig,
-} from "lucide-react"
+import { ChartColumnBig } from "lucide-react";
 
-export const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/
+export const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+
+import { CalendarClock, Clock, Cog, UserCheck, UserCog } from "lucide-react";
 
 export const employeeRoutes = [
   {
-    label: "Mensuales",
-    href: "/dashboard/monthly-clients",
-    Icon: SquareUserRound,
+    title: "Por hora",
+    url: "/hourly-clients",
+    icon: Clock,
   },
   {
-    label: "Por fracción",
-    href: "/dashboard/clients-per-fraction",
-    Icon: UsersRound,
+    title: "Mensuales",
+    url: "/monthly-clients",
+    icon: UserCheck,
   },
-]
+];
 
 export const adminRoutes = [
   {
-    label: "Empleados",
-    href: "/dashboard/employees",
-    Icon: CircleUser,
+    title: "Analíticas",
+    url: "/analytics",
+    icon: ChartColumnBig,
   },
   {
-    label: "Analíticas",
-    href: "/dashboard/analytics",
-    Icon: ChartColumnBig,
+    title: "Gestión de empleados",
+    url: "/employee-management",
+    icon: UserCog,
   },
-]
+  {
+    title: "Configuración",
+    url: "/business-configuration",
+    icon: Cog,
+  },
+];
+
+export const roles = ["Admin", "Empleado", "Todos"];
 
 export const daysOfWeek = [
   "Lunes",
@@ -41,11 +45,11 @@ export const daysOfWeek = [
   "Viernes",
   "Sábado",
   "Domingo",
-]
+];
 
 export const profileTabs: {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }[] = [
   {
     value: "general",
@@ -63,13 +67,13 @@ export const profileTabs: {
     value: "codes",
     label: "Generador de códigos",
   },
-]
+];
 
 export const shifts: {
-  id: number
-  dayOfWeek: number
-  startTime: Date
-  endTime: Date
+  id: number;
+  dayOfWeek: number;
+  startTime: Date;
+  endTime: Date;
 }[] = [
   // Lunes
   {
@@ -134,4 +138,4 @@ export const shifts: {
 
   // Domingo (descanso)
   // No hay turnos el domingo
-]
+];

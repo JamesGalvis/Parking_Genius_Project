@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { z } from "zod"
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Loader2 } from "lucide-react"
-import { toast } from "sonner"
-import Carrousel from "./carrousel"
+import { z } from "zod";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import Carrousel from "./carrousel";
 import {
   Form,
   FormField,
@@ -15,26 +15,26 @@ import {
   FormLabel,
   FormMessage,
   FormDescription,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { FormWrapper } from "@/components/auth/form-wrapper"
-import { PasswordInput } from "@/components/auth/password-input"
-import { RegisterFormSchema } from "@/schemas/auth"
-import { FormStateMessage } from "@/components/auth/form-state-message"
-import { register } from "@/actions/auth"
-import { Label } from "../ui/label"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { FormWrapper } from "@/components/auth/form-wrapper";
+import { PasswordInput } from "@/components/auth/password-input";
+import { RegisterFormSchema } from "@/schemas/auth";
+import { FormStateMessage } from "@/components/auth/form-state-message";
+import { register } from "@/actions/auth";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select"
+} from "../ui/select";
 
 export function SignUpForm() {
-  const [error, setError] = useState<string | undefined>(undefined)
-  const [success, setSuccess] = useState<string | undefined>(undefined)
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [success, setSuccess] = useState<string | undefined>(undefined);
 
   const form = useForm<z.infer<typeof RegisterFormSchema>>({
     resolver: zodResolver(RegisterFormSchema),
@@ -45,28 +45,27 @@ export function SignUpForm() {
       password: "",
       userType: undefined, // Se agrega para manejar el array de roles
     },
-  })
+  });
 
-  const { isSubmitting, isValid } = form.formState
+  const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof RegisterFormSchema>) => {
-    setError(undefined)
-    setSuccess(undefined)
+    setError(undefined);
+    setSuccess(undefined);
 
     try {
-      const response = await register(values)
+      const response = await register(values);
 
       if (response?.error) {
-        setError(response.error)
+        setError(response.error);
       } else {
-        setSuccess("Registro exitoso!")
-        form.reset()
-        
+        setSuccess("Registro exitoso!");
+        form.reset();
       }
     } catch {
-      toast.error("Algo salió mal!")
+      toast.error("Algo salió mal!");
     }
-  }
+  };
 
   return (
     <div className="grid grid-cols-2 bg-zinc-900 rounded-2xl">
@@ -129,6 +128,36 @@ export function SignUpForm() {
               </div>
 
               <FormField
+                control={form.control}
+                name="userType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tipo de usuario</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="h-14 rounded-xl pl-4 bg-zinc-700">
+                          <SelectValue placeholder="Selecciona el tipo de usuario" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="empleado">Empleado</SelectItem>
+                        <SelectItem value="administrador">
+                          Administrador
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Selecciona tu rol en la plataforma.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
                 name="email"
                 control={form.control}
                 render={({ field }) => (
@@ -156,7 +185,6 @@ export function SignUpForm() {
                     <FormLabel>Contraseña</FormLabel>
                     <FormControl>
                       <PasswordInput
-                        variant="largeRounded"
                         field={field}
                         isSubmitting={isSubmitting}
                       />
@@ -165,36 +193,6 @@ export function SignUpForm() {
                       La contraseña debe tener un mínimo de 8 caracteres,
                       incluyendo al menos 1 letra, 1 número y 1 carácter
                       especial.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="userType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo de usuario</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="h-14 rounded-xl pl-4">
-                          <SelectValue placeholder="Selecciona el tipo de usuario" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="empleado">Empleado</SelectItem>
-                        <SelectItem value="administrador">
-                          Administrador
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      Selecciona tu rol en la plataforma.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -221,5 +219,5 @@ export function SignUpForm() {
         </FormWrapper>
       </div>
     </div>
-  )
+  );
 }
