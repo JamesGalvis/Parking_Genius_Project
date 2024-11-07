@@ -2,8 +2,7 @@
 
 import { currentUser } from "@/lib/auth-user";
 import { db } from "@/lib/db";
-
-import { toZonedTime } from "date-fns-tz";
+import { getZonedDate } from "@/utils/time-formatter";
 
 // export async function getDailyChartData() {
 //   const loggedUser = await currentUser();
@@ -141,11 +140,11 @@ export async function getDailyEarnings() {
   const loggedUser = await currentUser();
 
   // Obtener la fecha de hoy al comienzo del día en la zona horaria de Colombia
-  const todayStart = toZonedTime(new Date(), "America/Bogota");
+  const todayStart = getZonedDate(new Date(), "America/Bogota");
   todayStart.setHours(0, 0, 0, 0);
 
   // Obtener la fecha de hoy al final del día en la zona horaria de Colombia
-  const todayEnd = toZonedTime(new Date(), "America/Bogota");
+  const todayEnd = getZonedDate(new Date(), "America/Bogota");
   todayEnd.setHours(23, 59, 59, 999);
 
   // Obtener las ganancias del día para clientes horarios

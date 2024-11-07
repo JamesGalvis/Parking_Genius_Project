@@ -4,10 +4,10 @@ import { currentUser } from "@/lib/auth-user";
 import { db } from "@/lib/db";
 import { MonthlyClientSchema } from "@/schemas/clients";
 import { z } from "zod";
-import { addMonths } from "date-fns";
-import { toZonedTime } from "date-fns-tz";
 import { monthlyPaymentEmail } from "@/lib/brevo";
 import { revalidatePath } from "next/cache";
+import { getZonedDate } from "@/utils/time-formatter";
+import { addMonths } from "date-fns";
 
 export async function getMonthlyClients() {
   try {
@@ -78,12 +78,12 @@ export async function createMonthlyClient(
     // Define la zona horaria de Colombia
     const timeZone = "America/Bogota";
 
-    // Obtén la fecha de inicio en la zona horaria de Colombia
+    // Obtén la fecha de inicio y fecha de fin en la zona horaria de Colombia
     const currentDate = new Date();
-    const startDate = toZonedTime(currentDate, timeZone);
+    const startDate = getZonedDate(currentDate, timeZone);
 
     // Calcula la fecha de finalización sumando un mes
-    const endDate = toZonedTime(addMonths(currentDate, 1), timeZone);
+    const endDate = addMonths(currentDate, 1)
 
     // Crea el cliente mensual en la base de datos
     const newClient = await db.client.create({
@@ -119,8 +119,8 @@ export async function createMonthlyClient(
       newClient.parkingLot.name
     );
 
-    revalidatePath("/")
-    revalidatePath("/monthly-clients")
+    revalidatePath("/");
+    revalidatePath("/monthly-clients");
     return { success: "Cliente creado." };
   } catch (error) {
     return { error: "Algo salió mal en el proceso." };
