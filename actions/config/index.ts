@@ -1,202 +1,202 @@
-"use server"
+// "use server"
 
-import { currentUser } from "@/lib/auth-user"
-import { db } from "@/lib/db"
-import { revalidatePath } from "next/cache"
+// import { currentUser } from "@/lib/auth-user"
+// import { db } from "@/lib/db"
+// import { revalidatePath } from "next/cache"
 
-export async function getVehicles() {
-  try {
-    const loggedUser = await currentUser()
+// export async function getVehicles() {
+//   try {
+//     const loggedUser = await currentUser()
 
-    if (!loggedUser) {
-      return null
-    }
+//     if (!loggedUser) {
+//       return null
+//     }
 
-    const vehicles = await db.vehicleCategory.findMany()
+//     const vehicles = await db.vehicleCategory.findMany()
 
-    if (!vehicles) return null
+//     if (!vehicles) return null
 
-    return vehicles
-  } catch {
-    return null
-  }
-}
+//     return vehicles
+//   } catch {
+//     return null
+//   }
+// }
 
-export async function getParkingLotByUser() {
-  try {
-    const loggedUser = await currentUser()
+// export async function getParkingLotByUser() {
+//   try {
+//     const loggedUser = await currentUser()
 
-    if (!loggedUser) {
-      return null
-    }
+//     if (!loggedUser) {
+//       return null
+//     }
 
-    const existingParking = await db.parkingLot.findFirst({
-      where: { users: { some: { id: loggedUser?.id! } } },
-    })
+//     const existingParking = await db.parkingLot.findFirst({
+//       where: { users: { some: { id: loggedUser?.id! } } },
+//     })
 
-    if (!existingParking) return null
+//     if (!existingParking) return null
 
-    return existingParking
-  } catch {
-    return null
-  }
-}
+//     return existingParking
+//   } catch {
+//     return null
+//   }
+// }
 
-export async function createParkingLot(name: string) {
-  try {
-    const loggedUser = await currentUser()
+// export async function createParkingLot(name: string) {
+//   try {
+//     const loggedUser = await currentUser()
 
-    if (!loggedUser) {
-      return { error: "Solicitud inválida." }
-    }
+//     if (!loggedUser) {
+//       return { error: "Solicitud inválida." }
+//     }
 
-    await db.parkingLot.create({
-      data: { name, users: { connect: { id: loggedUser.id } } },
-    })
+//     await db.parkingLot.create({
+//       data: { name, users: { connect: { id: loggedUser.id } } },
+//     })
 
-    return { success: "Parqueadero creado." }
-  } catch {
-    return { error: "Algo salió mal en la creación del parqueadero." }
-  }
-}
+//     return { success: "Parqueadero creado." }
+//   } catch {
+//     return { error: "Algo salió mal en la creación del parqueadero." }
+//   }
+// }
 
-export async function createCategory(
-  name: string,
-  monthlyRate: number,
-  fractionalRate: number,
-  parkingLotId: string
-) {
-  try {
-    // Verifica si la categoría ya existe
-    const existingCategory = await db.vehicleCategory.findUnique({
-      where: { name },
-    })
+// export async function createCategory(
+//   name: string,
+//   monthlyRate: number,
+//   fractionalRate: number,
+//   parkingLotId: string
+// ) {
+//   try {
+//     // Verifica si la categoría ya existe
+//     const existingCategory = await db.vehicleCategory.findUnique({
+//       where: { name },
+//     })
 
-    if (existingCategory) {
-      return { error: "La categoría ya existe." }
-    }
+//     if (existingCategory) {
+//       return { error: "La categoría ya existe." }
+//     }
 
-    // Crea la nueva categoría
-    const newCategory = await db.vehicleCategory.create({
-      data: {
-        name,
-        monthlyRate,
-        fractionalRate,
-        parkingLotId,
-      },
-    })
+//     // Crea la nueva categoría
+//     const newCategory = await db.vehicleCategory.create({
+//       data: {
+//         name,
+//         monthlyRate,
+//         fractionalRate,
+//         parkingLotId,
+//       },
+//     })
 
-    // Revalida la ruta para actualizar los datos en el frontend
-    revalidatePath(`/config`)
+//     // Revalida la ruta para actualizar los datos en el frontend
+//     revalidatePath(`/config`)
 
-    return { success: "Categoría creada exitosamente.", category: newCategory }
-  } catch {
-    return { error: "Hubo un error al crear la categoría." }
-  }
-}
+//     return { success: "Categoría creada exitosamente.", category: newCategory }
+//   } catch {
+//     return { error: "Hubo un error al crear la categoría." }
+//   }
+// }
 
-export async function deleteCategory(id: string) {
-  try {
-    await db.vehicleCategory.delete({
-      where: { id },
-    })
+// export async function deleteCategory(id: string) {
+//   try {
+//     await db.vehicleCategory.delete({
+//       where: { id },
+//     })
 
-    // Revalida la ruta para actualizar los datos en el frontend
-    revalidatePath(`/config`)
+//     // Revalida la ruta para actualizar los datos en el frontend
+//     revalidatePath(`/config`)
 
-    return {
-      success: "Categoría eliminada exitosamente.",
-    }
-  } catch {
-    return { error: "Hubo un error al eliminar la categoría." }
-  }
-}
+//     return {
+//       success: "Categoría eliminada exitosamente.",
+//     }
+//   } catch {
+//     return { error: "Hubo un error al eliminar la categoría." }
+//   }
+// }
 
-export async function updateCategory(
-  id: string,
-  name: string,
-  monthlyRate: number,
-  fractionalRate: number
-) {
-  try {
-    // Verifica si la categoría existe
-    const existingCategory = await db.vehicleCategory.findUnique({
-      where: { id },
-    })
+// export async function updateCategory(
+//   id: string,
+//   name: string,
+//   monthlyRate: number,
+//   fractionalRate: number
+// ) {
+//   try {
+//     // Verifica si la categoría existe
+//     const existingCategory = await db.vehicleCategory.findUnique({
+//       where: { id },
+//     })
 
-    if (!existingCategory) {
-      return { error: "La categoría no existe." }
-    }
+//     if (!existingCategory) {
+//       return { error: "La categoría no existe." }
+//     }
 
-    // Actualiza la nueva categoría
-    await db.vehicleCategory.update({
-      where: { id },
-      data: { name, monthlyRate, fractionalRate },
-    })
+//     // Actualiza la nueva categoría
+//     await db.vehicleCategory.update({
+//       where: { id },
+//       data: { name, monthlyRate, fractionalRate },
+//     })
 
-    // Revalida la ruta para actualizar los datos en el frontend
-    revalidatePath(`/config`)
+//     // Revalida la ruta para actualizar los datos en el frontend
+//     revalidatePath(`/config`)
 
-    return { success: "Categoría creada exitosamente." }
-  } catch {
-    return { error: "Hubo un error al crear la categoría." }
-  }
-}
+//     return { success: "Categoría creada exitosamente." }
+//   } catch {
+//     return { error: "Hubo un error al crear la categoría." }
+//   }
+// }
 
-export async function linkCodeToParkingLot(
-  parkingLotId: string,
-  code: string,
-  codeValidationTime: Date
-) {
-  try {
-    // Verifica si el parqueadero existe
-    const existingParking = await db.parkingLot.findUnique({
-      where: { id: parkingLotId },
-    })
+// export async function linkCodeToParkingLot(
+//   parkingLotId: string,
+//   code: string,
+//   codeValidationTime: Date
+// ) {
+//   try {
+//     // Verifica si el parqueadero existe
+//     const existingParking = await db.parkingLot.findUnique({
+//       where: { id: parkingLotId },
+//     })
 
-    if (!existingParking) {
-      return { error: "La categoría no existe." }
-    }
+//     if (!existingParking) {
+//       return { error: "La categoría no existe." }
+//     }
 
-    // Agreagr el codigo de vinculación
-    await db.parkingLot.update({
-      where: { id: parkingLotId },
-      data: { linkCode: code, codeValidationTime },
-    })
+//     // Agreagr el codigo de vinculación
+//     await db.parkingLot.update({
+//       where: { id: parkingLotId },
+//       data: { linkCode: code, codeValidationTime },
+//     })
 
-    // Revalida la ruta para actualizar los datos en el frontend
-    revalidatePath(`/profile`)
+//     // Revalida la ruta para actualizar los datos en el frontend
+//     revalidatePath(`/profile`)
 
-    return { success: "Codigo creado exitosamente." }
-  } catch {
-    return { error: "Hubo un error al crear el código." }
-  }
-}
+//     return { success: "Codigo creado exitosamente." }
+//   } catch {
+//     return { error: "Hubo un error al crear el código." }
+//   }
+// }
 
-export async function deleteCode(
-  parkingLotId: string
-) {
-  try {
-    // Verifica si el parqueadero existe
-    const existingParking = await db.parkingLot.findUnique({
-      where: { id: parkingLotId },
-    })
+// export async function deleteCode(
+//   parkingLotId: string
+// ) {
+//   try {
+//     // Verifica si el parqueadero existe
+//     const existingParking = await db.parkingLot.findUnique({
+//       where: { id: parkingLotId },
+//     })
 
-    if (!existingParking) {
-      return { error: "La categoría no existe." }
-    }
+//     if (!existingParking) {
+//       return { error: "La categoría no existe." }
+//     }
 
-    // Limpiar el codigo de vinculación
-    await db.parkingLot.update({
-      where: { id: parkingLotId },
-      data: { linkCode: null, codeValidationTime: null },
-    })
+//     // Limpiar el codigo de vinculación
+//     await db.parkingLot.update({
+//       where: { id: parkingLotId },
+//       data: { linkCode: null, codeValidationTime: null },
+//     })
 
-    // Revalida la ruta para actualizar los datos en el frontend
-    revalidatePath(`/profile`)
+//     // Revalida la ruta para actualizar los datos en el frontend
+//     revalidatePath(`/profile`)
 
-    return { success: "Codigo eliminado exitosamente." }
-  } catch {
-    return { error: "Hubo un error al crear el código." }
-  }
-}
+//     return { success: "Codigo eliminado exitosamente." }
+//   } catch {
+//     return { error: "Hubo un error al crear el código." }
+//   }
+// }
