@@ -100,7 +100,6 @@ export function GeneralInfo({ user }: GeneralInfoProps) {
                     {edit && (
                       <FormControl>
                         <Input
-                          variant="largeRounded"
                           className="bg-background/50 ring-main/40 hover:ring-4"
                           disabled={isSubmitting}
                           {...field}
@@ -125,7 +124,6 @@ export function GeneralInfo({ user }: GeneralInfoProps) {
                     {edit && (
                       <FormControl>
                         <Input
-                          variant="largeRounded"
                           type="email"
                           placeholder="ej. jhon@gmail.com"
                           disabled
@@ -151,7 +149,6 @@ export function GeneralInfo({ user }: GeneralInfoProps) {
                     {edit && (
                       <FormControl>
                         <Input
-                          variant="largeRounded"
                           type="tel"
                           className="bg-background/50 ring-main/40 hover:ring-4"
                           disabled={isSubmitting}
@@ -172,7 +169,7 @@ export function GeneralInfo({ user }: GeneralInfoProps) {
                 <div>
                   <Label>Rol</Label>
                   <p className="text-accent-foreground/80 text-[15px]">
-                    {user.role === "EMPLOYEE"
+                    {user.role === "Empleado"
                       ? "Encargado de turno"
                       : "Administrador"}
                   </p>

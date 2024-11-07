@@ -95,7 +95,6 @@ export function SignUpForm() {
                       <FormLabel>Nombre</FormLabel>
                       <FormControl>
                         <Input
-                          variant="largeRounded"
                           placeholder="Jhon Doe"
                           disabled={isSubmitting}
                           {...field}
@@ -114,7 +113,6 @@ export function SignUpForm() {
                       <FormLabel>Teléfono</FormLabel>
                       <FormControl>
                         <Input
-                          variant="largeRounded"
                           type="tel"
                           placeholder="Número de teléfono"
                           disabled={isSubmitting}
@@ -165,7 +163,6 @@ export function SignUpForm() {
                     <FormLabel>Correo electrónico</FormLabel>
                     <FormControl>
                       <Input
-                        variant="largeRounded"
                         type="email"
                         placeholder="ej. jhon@gmail.com"
                         disabled={isSubmitting}

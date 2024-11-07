@@ -76,11 +76,9 @@ export function ChangePassword() {
                     <FormLabel>Contraseña anterior</FormLabel>
                     <FormControl>
                       <PasswordInput
-                        variant="largeRounded"
                         className="bg-background/50 ring-main/40 hover:ring-4"
                         field={field}
                         isSubmitting={isSubmitting}
-                        showPlaceholder={false}
                       />
                     </FormControl>
                     <FormMessage />
@@ -95,7 +93,6 @@ export function ChangePassword() {
                     <FormLabel>Contraseña nueva</FormLabel>
                     <FormControl>
                       <PasswordInput
-                        variant="largeRounded"
                         className="bg-background/50 ring-main/40 hover:ring-4"
                         field={field}
                         isSubmitting={isSubmitting}

@@ -89,7 +89,6 @@ export function SignInForm() {
                       <FormLabel>Correo electrónico</FormLabel>
                       <FormControl>
                         <Input
-                          variant="largeRounded"
                           type="email"
                           placeholder="ej. jhon@gmail.com"
                           disabled={isSubmitting}
@@ -109,7 +108,6 @@ export function SignInForm() {
                       <FormLabel>Contraseña</FormLabel>
                       <FormControl>
                         <PasswordInput
-                          variant="largeRounded"
                           field={field}
                           isSubmitting={isSubmitting}
                           className="border border-zinc-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 transition duration-200"
