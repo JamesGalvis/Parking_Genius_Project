@@ -85,7 +85,6 @@ export function RegistrationCompletionForm() {
                     <FormLabel>Nombre</FormLabel>
                     <FormControl>
                       <Input
-                        variant="largeRounded"
                         placeholder="Jhon Doe"
                         disabled={isSubmitting}
                         {...field}
@@ -103,7 +102,6 @@ export function RegistrationCompletionForm() {
                     <FormLabel>Teléfono</FormLabel>
                     <FormControl>
                       <Input
-                        variant="largeRounded"
                         type="tel"
                         placeholder="Numero de teléfono"
                         disabled={isSubmitting}
@@ -123,7 +121,6 @@ export function RegistrationCompletionForm() {
                   <FormLabel>Correo electrónico</FormLabel>
                   <FormControl>
                     <Input
-                      variant="largeRounded"
                       type="email"
                       placeholder="ej. jhon@gmail.com"
                       disabled
@@ -142,7 +139,6 @@ export function RegistrationCompletionForm() {
                   <FormLabel>Contraseña</FormLabel>
                   <FormControl>
                     <PasswordInput
-                      variant="largeRounded"
                       field={field}
                       isSubmitting={isSubmitting}
                     />
