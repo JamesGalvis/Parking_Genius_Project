@@ -1,17 +1,17 @@
 import { formatToCOP } from "@/utils/format-to-cop";
-import { getZonedDate } from "@/utils/time-formatter";
 import {
   TransactionalEmailsApi,
   SendSmtpEmail,
   TransactionalEmailsApiApiKeys,
 } from "@getbrevo/brevo";
 import { format } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 import { es } from "date-fns/locale";
 
 // Función para formatear la fecha en español en la zona horaria de Colombia
 function formatColombianDate(date: Date): string {
   const timeZone = "America/Bogota"; // Zona horaria de Colombia
-  const zonedDate = getZonedDate(date, timeZone);
+  const zonedDate = toZonedTime(date, timeZone);
 
   return format(zonedDate, "d 'de' MMMM, yyyy, h:mm a", { locale: es });
 }

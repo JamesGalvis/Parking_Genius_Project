@@ -2,7 +2,7 @@
 
 import { currentUser } from "@/lib/auth-user";
 import { db } from "@/lib/db";
-import { getZonedDate } from "@/utils/time-formatter";
+import { toZonedTime } from "date-fns-tz"
 
 // export async function getDailyChartData() {
 //   const loggedUser = await currentUser();
@@ -66,10 +66,19 @@ import { getZonedDate } from "@/utils/time-formatter";
 
 export async function getDailyChartData() {
   const loggedUser = await currentUser();
-  const startDate = new Date();
-  startDate.setHours(4, 0, 0, 0); // Comienza a las 4:00am
-  const endDate = new Date();
-  endDate.setHours(23, 59, 59, 999); // Termina a las 11:59pm (cubre hasta las 12:00am)
+  
+  // const startDate = new Date();
+  // startDate.setHours(0, 0, 0, 0); // Comienza a las 4:00am
+  
+  // const endDate = new Date();
+  // endDate.setHours(23, 59, 59, 999); // Termina a las 11:59pm (cubre hasta las 12:00am)
+
+  // Crear la fecha de inicio y fin en la zona horaria local
+  const startDate = toZonedTime(new Date(), "America/Bogota");
+  startDate.setHours(4, 0, 0, 0); // Comienza a las 4:00am en la zona horaria local
+
+  const endDate = toZonedTime(new Date(), "America/Bogota");
+  endDate.setHours(23, 59, 59, 999); // Termina a las 11:59pm en la zona horaria local
 
   // Obtener los datos de clientes por hora (salidas)
   const hourlyClients = await db.client.findMany({
@@ -140,11 +149,11 @@ export async function getDailyEarnings() {
   const loggedUser = await currentUser();
 
   // Obtener la fecha de hoy al comienzo del día en la zona horaria de Colombia
-  const todayStart = getZonedDate(new Date(), "America/Bogota");
+  const todayStart = toZonedTime(new Date(), "America/Bogota");
   todayStart.setHours(0, 0, 0, 0);
 
   // Obtener la fecha de hoy al final del día en la zona horaria de Colombia
-  const todayEnd = getZonedDate(new Date(), "America/Bogota");
+  const todayEnd = toZonedTime(new Date(), "America/Bogota");
   todayEnd.setHours(23, 59, 59, 999);
 
   // Obtener las ganancias del día para clientes horarios

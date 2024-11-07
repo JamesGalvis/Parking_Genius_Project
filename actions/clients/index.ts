@@ -6,7 +6,6 @@ import { MonthlyClientSchema } from "@/schemas/clients";
 import { z } from "zod";
 import { monthlyPaymentEmail } from "@/lib/brevo";
 import { revalidatePath } from "next/cache";
-import { getZonedDate } from "@/utils/time-formatter";
 import { addMonths } from "date-fns";
 
 export async function getMonthlyClients() {
@@ -75,12 +74,9 @@ export async function createMonthlyClient(
       },
     });
 
-    // Define la zona horaria de Colombia
-    const timeZone = "America/Bogota";
-
     // Obtén la fecha de inicio y fecha de fin en la zona horaria de Colombia
     const currentDate = new Date();
-    const startDate = getZonedDate(currentDate, timeZone);
+    const startDate = currentDate;
 
     // Calcula la fecha de finalización sumando un mes
     const endDate = addMonths(currentDate, 1)
