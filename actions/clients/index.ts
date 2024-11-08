@@ -6,7 +6,8 @@ import { MonthlyClientSchema } from "@/schemas/clients";
 import { z } from "zod";
 import { monthlyPaymentEmail } from "@/lib/brevo";
 import { revalidatePath } from "next/cache";
-import { addMonths } from "date-fns";
+// import { addMonths } from "date-fns";
+import { DateTime } from "luxon";
 
 export async function getMonthlyClients() {
   try {
@@ -74,12 +75,12 @@ export async function createMonthlyClient(
       },
     });
 
-    // Obtén la fecha de inicio y fecha de fin en la zona horaria de Colombia
-    const currentDate = new Date();
-    const startDate = currentDate;
+    // Obtén la fecha actual y ajusta a la zona horaria de Colombia
+    const currentDate = DateTime.now().setZone('America/Bogota');
+    const startDate = currentDate.toJSDate();
 
     // Calcula la fecha de finalización sumando un mes
-    const endDate = addMonths(currentDate, 1)
+    const endDate = currentDate.plus({ months: 1 }).toJSDate();
 
     // Crea el cliente mensual en la base de datos
     const newClient = await db.client.create({
