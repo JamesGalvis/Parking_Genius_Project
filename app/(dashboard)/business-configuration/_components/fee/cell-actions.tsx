@@ -1,19 +1,12 @@
 "use client";
 
 import { toast } from "sonner";
-import { Edit, MoreHorizontal, Trash2 } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import { useEffect, useState, useTransition } from "react";
 
 import { FeeColumns } from "./columns";
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/components/common/alert-modal";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Modal } from "@/components/common/modal";
 import {
   deleteFees,
@@ -33,6 +26,7 @@ export function CellAction({ data }: CellActionProps) {
   const [vehicleTypes, setVehicleTypes] = useState<VehicleType[]>([]);
   const [clientTypes, setClientTypes] = useState<ClientType[]>([]);
 
+  const [openActions, setOpenActions] = useState(false);
   const [open, setOpen] = useState(false);
   const [openAlertConfirmation, setOpenAlertConfirmation] = useState(false);
 
@@ -43,6 +37,11 @@ export function CellAction({ data }: CellActionProps) {
 
   const closeDialog = () => {
     setOpen(false);
+    setOpenActions(false);
+  };
+
+  const handleActionsOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
   };
 
   const handleConfirm = () => {
@@ -90,29 +89,22 @@ export function CellAction({ data }: CellActionProps) {
         />
       </Modal>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
-            <span className="sr-only">Abrir menú</span>
-            <MoreHorizontal className="size-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-
-          <DropdownMenuItem onClick={() => setOpen(true)}>
-            <Edit className="size-4" />
-            Editar
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => setOpenAlertConfirmation(true)}
-            className=" dark:hover:focus:bg-rose-400/20 hover:focus:bg-rose-400/20 text-rose-400 hover:focus:text-rose-400 dark:hover:focus:text-rose-400"
-          >
-            <Trash2 className="size-4 mr-2" />
-            Eliminar
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="flex items-center gap-1 w-full justify-end">
+        <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
+          <Edit strokeWidth={2.5} className="size-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="group hover:bg-red-500"
+          onClick={() => setOpenAlertConfirmation(true)}
+        >
+          <Trash2
+            strokeWidth={2.5}
+            className="size-5 text-red-400 group-hover:text-white"
+          />
+        </Button>
+      </div>
     </>
   );
 }

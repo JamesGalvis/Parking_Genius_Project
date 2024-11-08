@@ -14,14 +14,6 @@ import {
 
 export async function getVehicleTypes() {
   try {
-    const role = await currentRole();
-
-    const isAdmin = role === "Admin" || role === "SuperAdmin";
-
-    if (!isAdmin) {
-      return [];
-    }
-
     return await db.vehicleType.findMany();
   } catch {
     return [];
@@ -30,14 +22,6 @@ export async function getVehicleTypes() {
 
 export async function getClientTypes() {
   try {
-    const role = await currentRole();
-
-    const isAdmin = role === "Admin" || role === "SuperAdmin";
-
-    if (!isAdmin) {
-      return [];
-    }
-
     return await db.clientType.findMany();
   } catch {
     return [];

@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
+import { CellAction } from "./cell-actions";
 
 export type MonthlyClientColumns = {
   id: string;
@@ -112,19 +113,6 @@ export const columns: ColumnDef<MonthlyClientColumns>[] = [
     },
   },
   {
-    accessorKey: "endDate",
-    header: () => <div className="min-w-[160px]">Fecha de Expiración</div>,
-    cell: ({ row }) => {
-      const endDate: string = row.getValue("endDate");
-
-      return (
-        <p className="py-4 min-w-[180px] text-muted-foreground text-sm">
-          {endDate}
-        </p>
-      );
-    },
-  },
-  {
     accessorKey: "createdAt",
     header: () => <div className="min-w-[160px]">Fecha de Inicio</div>,
     cell: ({ row }) => {
@@ -138,10 +126,23 @@ export const columns: ColumnDef<MonthlyClientColumns>[] = [
     },
   },
   {
+    accessorKey: "endDate",
+    header: () => <div className="min-w-[160px]">Fecha de Expiración</div>,
+    cell: ({ row }) => {
+      const endDate: string = row.getValue("endDate");
+
+      return (
+        <p className="py-4 min-w-[180px] text-muted-foreground text-sm">
+          {endDate}
+        </p>
+      );
+    },
+  },
+  {
     id: "actions",
     cell: ({ row }) => (
       <div className="text-end min-w-[80px]">
-        {/* <CellAction data={row.original} /> */}
+        <CellAction data={row.original} />
       </div>
     ),
   },

@@ -58,7 +58,7 @@ export function CellAction({ data }: CellActionProps) {
       />
 
       <Button onClick={() => setOpen(true)} variant="destructive" size="icon">
-        <Trash2 />
+      <Trash2 className="size-5" />
       </Button>
     </>
   );

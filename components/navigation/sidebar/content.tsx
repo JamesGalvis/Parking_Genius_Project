@@ -14,10 +14,11 @@ import { cn } from "@/lib/utils";
 import { RouteItem } from "@/components/navigation/sidebar/route-item";
 
 interface ContentProps {
+  monthlyClientsCount: number
   isAdmin: boolean;
 }
 
-export function Content({ isAdmin }: ContentProps) {
+export function Content({ isAdmin, monthlyClientsCount }: ContentProps) {
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -33,16 +34,19 @@ export function Content({ isAdmin }: ContentProps) {
         <SidebarGroupLabel>Gestión de Clientes</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
-            {employeeRoutes.map(({ url, icon: Icon, title }) => (
+            {employeeRoutes.map(({ url, icon: Icon, title }) => {
+              const clientsCount = title === "Mensuales" ? monthlyClientsCount : 0
+
+              return (
               <RouteItem
                 key={url}
                 title={title}
                 url={url}
                 Icon={Icon}
                 showMenuBadge
-                menuBadgeLabel="0"
+                menuBadgeLabel={clientsCount}
               />
-            ))}
+            )})}
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>

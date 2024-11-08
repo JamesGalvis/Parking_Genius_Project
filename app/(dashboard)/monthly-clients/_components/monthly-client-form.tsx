@@ -28,7 +28,7 @@ import { Loader } from "lucide-react";
 import { MonthlyClientSchema } from "@/schemas/clients";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
-import { createMonthlyClient } from "@/actions/clients";
+import { createMonthlyClient, updateMonthlyClient } from "@/actions/clients";
 
 type FormValues = z.infer<typeof MonthlyClientSchema>;
 
@@ -49,7 +49,7 @@ interface MonthlyClientRegistrationFormProps {
   closeDialog: () => void;
 }
 
-export function MonthlyClientRegistrationForm({
+export function MonthlyClientForm({
   initialData,
   clientTypes,
   vehicleTypes,
@@ -60,13 +60,13 @@ export function MonthlyClientRegistrationForm({
   const form = useForm<FormValues>({
     resolver: zodResolver(MonthlyClientSchema),
     defaultValues: {
-      name: "",
-      document: "",
-      phone: "",
-      plate: "",
-      email: "",
-      clientTypeId: "",
-      vehicleTypeId: "",
+      name: initialData?.name || "",
+      document: initialData?.document || "",
+      phone: initialData?.phone || "",
+      plate: initialData?.plate || "",
+      email: initialData?.email || "",
+      clientTypeId: initialData?.clientTypeId || "",
+      vehicleTypeId: initialData?.vehicleTypeId || "",
     },
   });
 
@@ -111,23 +111,21 @@ export function MonthlyClientRegistrationForm({
   function handleUpdateClient(values: z.infer<typeof MonthlyClientSchema>) {
     startTransition(async () => {
       try {
-        // const { error, success } = await updateFees(
-        //   values,
-        //   initialData?.hourlyFeeId!,
-        //   initialData?.monthlyFeeId!
-        // );
-        // if (error) {
-        //   toast.error("Error", {
-        //     description: error,
-        //   });
-        // }
-        // if (success) {
-        //   form.reset();
-        //   toast.success("Proceso exitoso.", {
-        //     description: success,
-        //   });
-        //   closeDialog();
-        // }
+        const { error, success } = await updateMonthlyClient(values, initialData?.id!);
+
+        if (error) {
+          toast.error("Error", {
+            description: error,
+          });
+        }
+
+        if (success) {
+          form.reset();
+          toast.success("Proceso exitoso.", {
+            description: success,
+          });
+          closeDialog();
+        }
       } catch {
         toast.error("Ocurrió un problema con tu solicitud.");
       }
@@ -227,7 +225,6 @@ export function MonthlyClientRegistrationForm({
                       {clientType.name}
                     </SelectItem>
                   ))}
-                  {/* Añadir más tipos de cliente según sea necesario */}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -252,7 +249,6 @@ export function MonthlyClientRegistrationForm({
                       {vehicleType.name}
                     </SelectItem>
                   ))}
-                  {/* Añadir más tipos de vehículo según sea necesario */}
                 </SelectContent>
               </Select>
               <FormMessage />
