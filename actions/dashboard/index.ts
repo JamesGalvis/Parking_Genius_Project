@@ -76,7 +76,7 @@ export async function getDailyChartData() {
   // Crear la fecha de inicio en la zona horaria de Colombia (4:00 am)
   const startDate = DateTime.now()
     .setZone('America/Bogota')
-    .set({ hour: 4, minute: 0, second: 0, millisecond: 0 })
+    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
     .toJSDate();
 
   // Crear la fecha de fin en la zona horaria de Colombia (11:59:59 pm)
