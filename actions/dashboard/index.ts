@@ -2,7 +2,7 @@
 
 import { currentUser } from "@/lib/auth-user";
 import { db } from "@/lib/db";
-import { toZonedTime } from "date-fns-tz"
+import { DateTime } from 'luxon';
 
 // export async function getDailyChartData() {
 //   const loggedUser = await currentUser();
@@ -73,12 +73,17 @@ export async function getDailyChartData() {
   // const endDate = new Date();
   // endDate.setHours(23, 59, 59, 999); // Termina a las 11:59pm (cubre hasta las 12:00am)
 
-  // Crear la fecha de inicio y fin en la zona horaria local
-  const startDate = toZonedTime(new Date(), "America/Bogota");
-  startDate.setHours(4, 0, 0, 0); // Comienza a las 4:00am en la zona horaria local
+  // Crear la fecha de inicio en la zona horaria de Colombia (4:00 am)
+  const startDate = DateTime.now()
+    .setZone('America/Bogota')
+    .set({ hour: 4, minute: 0, second: 0, millisecond: 0 })
+    .toJSDate();
 
-  const endDate = toZonedTime(new Date(), "America/Bogota");
-  endDate.setHours(23, 59, 59, 999); // Termina a las 11:59pm en la zona horaria local
+  // Crear la fecha de fin en la zona horaria de Colombia (11:59:59 pm)
+  const endDate = DateTime.now()
+    .setZone('America/Bogota')
+    .set({ hour: 23, minute: 59, second: 59, millisecond: 999 })
+    .toJSDate();
 
   // Obtener los datos de clientes por hora (salidas)
   const hourlyClients = await db.client.findMany({
@@ -149,12 +154,11 @@ export async function getDailyEarnings() {
   const loggedUser = await currentUser();
 
   // Obtener la fecha de hoy al comienzo del día en la zona horaria de Colombia
-  const todayStart = toZonedTime(new Date(), "America/Bogota");
-  todayStart.setHours(0, 0, 0, 0);
+  const todayStart = DateTime.now().setZone('America/Bogota').startOf('day').toJSDate();
 
   // Obtener la fecha de hoy al final del día en la zona horaria de Colombia
-  const todayEnd = toZonedTime(new Date(), "America/Bogota");
-  todayEnd.setHours(23, 59, 59, 999);
+  const todayEnd = DateTime.now().setZone('America/Bogota').endOf('day').toJSDate();
+
 
   // Obtener las ganancias del día para clientes horarios
   const hourlyEarnings = await db.client.aggregate({
