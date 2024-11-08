@@ -21,19 +21,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MonthlyClientColumns } from "./columns";
+import { HourlyClientColumns } from "./columns";
 import { toast } from "sonner";
 import { useTransition } from "react";
 import { Loader } from "lucide-react";
-import { MonthlyClientSchema } from "@/schemas/clients";
-import { PhoneInput } from "react-international-phone";
-import "react-international-phone/style.css";
-import { createMonthlyClient, updateMonthlyClient } from "@/actions/clients";
+import { HourlyClientSchema } from "@/schemas/clients";
+import { createHourlyClient, updateHourlyClient } from "@/actions/clients";
 
-type FormValues = z.infer<typeof MonthlyClientSchema>;
+type FormValues = z.infer<typeof HourlyClientSchema>;
 
-interface MonthlyClientRegistrationFormProps {
-  initialData?: MonthlyClientColumns;
+interface HourlyClientFormProps {
+  initialData?: HourlyClientColumns;
   vehicleTypes: {
     id: string;
     name: string;
@@ -49,22 +47,18 @@ interface MonthlyClientRegistrationFormProps {
   closeDialog: () => void;
 }
 
-export function MonthlyClientForm({
+export function HourlyClientForm({
   initialData,
   clientTypes,
   vehicleTypes,
   closeDialog,
-}: MonthlyClientRegistrationFormProps) {
+}: HourlyClientFormProps) {
   const [isLoading, startTransition] = useTransition();
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(MonthlyClientSchema),
+    resolver: zodResolver(HourlyClientSchema),
     defaultValues: {
-      name: initialData?.name || "",
-      document: initialData?.document || "",
-      phone: initialData?.phone || "",
       plate: initialData?.plate || "",
-      email: initialData?.email || "",
       clientTypeId: initialData?.clientTypeId || "",
       vehicleTypeId: initialData?.vehicleTypeId || "",
     },
@@ -72,7 +66,7 @@ export function MonthlyClientForm({
 
   const { isValid } = form.formState;
 
-  async function onSubmit(values: z.infer<typeof MonthlyClientSchema>) {
+  async function onSubmit(values: z.infer<typeof HourlyClientSchema>) {
     try {
       if (!initialData) {
         handleCreateClient(values);
@@ -84,10 +78,10 @@ export function MonthlyClientForm({
     }
   }
 
-  function handleCreateClient(values: z.infer<typeof MonthlyClientSchema>) {
+  function handleCreateClient(values: z.infer<typeof HourlyClientSchema>) {
     startTransition(async () => {
       try {
-        const { error, success } = await createMonthlyClient(values);
+        const { error, success } = await createHourlyClient(values);
 
         if (error) {
           toast.error("Error", {
@@ -108,10 +102,13 @@ export function MonthlyClientForm({
     });
   }
 
-  function handleUpdateClient(values: z.infer<typeof MonthlyClientSchema>) {
+  function handleUpdateClient(values: z.infer<typeof HourlyClientSchema>) {
     startTransition(async () => {
       try {
-        const { error, success } = await updateMonthlyClient(values, initialData?.id!);
+        const { error, success } = await updateHourlyClient(
+          values,
+          initialData?.id!
+        );
 
         if (error) {
           toast.error("Error", {
@@ -137,71 +134,12 @@ export function MonthlyClientForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nombre</FormLabel>
-              <FormControl>
-                <Input placeholder="Nombre del cliente" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="document"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Documento</FormLabel>
-              <FormControl>
-                <Input placeholder="Número de documento" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Teléfono</FormLabel>
-              <FormControl>
-                <PhoneInput
-                  defaultCountry="co"
-                  hideDropdown
-                  value={field.value}
-                  onChange={(phone) => {
-                    field.onChange(phone);
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="plate"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Matrícula del vehículo</FormLabel>
               <FormControl>
                 <Input placeholder="Matrícula" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="email@ejemplo.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -258,7 +196,7 @@ export function MonthlyClientForm({
 
         <Button
           variant="primary"
-          disabled={isLoading || !isValid || form.watch("phone").length < 13}
+          disabled={isLoading || !isValid}
           className="w-full"
         >
           {isLoading && <Loader className="animate-spin" />}

@@ -115,7 +115,8 @@ model Client {
 
   clientCategory ClientCategory // Enum para definir si es por hora o mensual
 
-  totalPaid Float @default(0.0)
+  totalPaid Float   @default(0.0)
+  isActive  Boolean @default(true)
 
   // Campos específicos para clientes por hora
   entryDate DateTime? // Fecha de entrada, solo para clientes por hora
