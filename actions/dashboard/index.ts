@@ -76,7 +76,7 @@ export async function getDailyChartData() {
   // Crear la fecha de inicio en la zona horaria de Colombia (4:00 am)
   const startDate = DateTime.now()
     .setZone('America/Bogota')
-    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+    .set({ hour: 4, minute: 0, second: 0, millisecond: 0 })
     .toJSDate();
 
   // Crear la fecha de fin en la zona horaria de Colombia (11:59:59 pm)
@@ -117,7 +117,7 @@ export async function getDailyChartData() {
   // Acumular ganancias por hora de clientes horarios
   hourlyClients.forEach((client) => {
     if (client.exitDate) {
-      const hour = client.exitDate.getHours();
+      const hour = DateTime.fromJSDate(client.exitDate).setZone('America/Bogota').hour;
       if (hour >= 4 && hour <= 23) {
         earningsByHour[hour - 4] += client.totalPaid; // Ajustar el índice al rango 4-23
       }
@@ -127,7 +127,7 @@ export async function getDailyChartData() {
   // Acumular ganancias por hora de clientes mensuales
   monthlyClients.forEach((client) => {
     if (client.createdAt) {
-      const hour = client.createdAt.getHours();
+      const hour = DateTime.fromJSDate(client.createdAt).setZone('America/Bogota').hour;
       if (hour >= 4 && hour <= 23) {
         earningsByHour[hour - 4] += client.totalPaid; // Ajustar el índice al rango 4-23
       }
