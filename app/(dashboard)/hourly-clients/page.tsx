@@ -18,7 +18,7 @@ export default async function HourlyClientsPage() {
     plate: client.plate,
     vehicleType: client.vehicleType.name,
     clientType: client.clientType.name,
-    entryDate: format(client.entryDate!, "d 'de' MMMM, yyyy", { locale: es }),
+    entryDate: format(client.entryDate!, "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es }),
   }));
 
   return (

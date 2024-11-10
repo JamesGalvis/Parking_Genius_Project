@@ -8,7 +8,7 @@ import { HourlyClientColumns } from "./columns";
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/components/common/alert-modal";
 import { Modal } from "@/components/common/modal";
-import { deleteMonthlyClient } from "@/actions/clients";
+import { deleteHourlyClient, deleteMonthlyClient } from "@/actions/clients";
 import { useCurrentRole } from "@/hooks/use-current-role";
 import { cn } from "@/lib/utils";
 import { ClientType, UserRole, VehicleType } from "@prisma/client";
@@ -43,7 +43,7 @@ export function CellAction({ data }: CellActionProps) {
   const handleConfirm = () => {
     startTransition(async () => {
       try {
-        const { error, success } = await deleteMonthlyClient(data.id);
+        const { error, success } = await deleteHourlyClient(data.id);
 
         if (error) {
           toast.error("Algo salió mal.", {

@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Clock, CreditCard, Loader } from "lucide-react";
+import { Clock, Loader } from "lucide-react";
 import React, { useEffect, useState, useTransition } from "react";
 import { HourlyClientColumns } from "./columns";
 import { calculateTotalFee, getPaidDetails } from "@/actions/clients";
@@ -76,27 +76,23 @@ export default function PaidDetailsTrigger({ data }: PaidDetailsTriggerProps) {
           )}
           {paidDetails && (
             <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <span className="text-right col-span-1">Vehículo:</span>
-                <span className="font-semibold col-span-3 uppercase">
-                  {data.plate}
-                </span>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <span className="text-right col-span-1">
-                  <Clock className="inline-block mr-2" size={18} />
-                </span>
-                <span className="font-semibold col-span-3">
-                  {paidDetails?.stayDuration}
-                </span>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <span className="text-right col-span-1">
-                  <CreditCard className="inline-block mr-2" size={18} />
-                </span>
-                <span className="font-semibold col-span-3 text-lg text-primary">
+              <div className="text-center">
+                <div className="text-4xl font-bold tracking-tighter">
                   {`${formatToCOP(paidDetails?.totalAmount!)} COP`}
-                </span>
+                </div>
+              </div>
+              <div className="space-y-3 bg-muted-foreground/10 rounded-lg p-4">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="">Vehículo:</span>
+                  <span>{data.plate}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="flex items-center gap-2">Tiempo:</span>
+                  <span className="flex items-center">
+                    <Clock className="h-4 w-4 mr-2" />{" "}
+                    {paidDetails.stayDuration}
+                  </span>
+                </div>
               </div>
             </div>
           )}

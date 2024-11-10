@@ -101,7 +101,7 @@ model Client {
   name     String? // Nombre, solo necesario para clientes mensuales
   document String? @unique // Documento, solo relevante y único para clientes mensuales
   phone    String? // Teléfono, solo para clientes mensuales
-  plate    String  @unique // Matrícula del vehículo
+  plate    String // Matrícula del vehículo
   email    String?
 
   parkingLotId String

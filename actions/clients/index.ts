@@ -135,7 +135,7 @@ export async function createMonthlyClient(
     const { name, email, phone, document, plate, vehicleTypeId, clientTypeId } =
       result.data;
 
-    const existingClient = await db.client.findUnique({
+    const existingClient = await db.client.findFirst({
       where: { plate, isActive: true },
     });
 
@@ -241,6 +241,34 @@ export async function deleteMonthlyClient(id: string) {
   }
 }
 
+export async function deleteHourlyClient(id: string) {
+  try {
+    const role = await currentRole();
+
+    if (role !== "SuperAdmin" && role !== "Admin") {
+      return { error: "Proceso no autorizado." };
+    }
+
+    const existingUser = await db.client.findUnique({
+      where: { id, clientCategory: "HOURLY" },
+    });
+
+    if (!existingUser) {
+      return { error: "El cliente a eliminar no existe." };
+    }
+
+    await db.client.delete({
+      where: { id, clientCategory: "HOURLY" },
+    });
+
+    revalidatePath("/");
+    revalidatePath("/monthly-clients");
+    return { success: "Cliente eliminado." };
+  } catch (error) {
+    return { error: "Algo salió mal en el proceso." };
+  }
+}
+
 export async function updateMonthlyClient(
   values: z.infer<typeof MonthlyClientSchema>,
   clientId: string
@@ -334,7 +362,7 @@ export async function createHourlyClient(
 
     const { plate, vehicleTypeId, clientTypeId } = result.data;
 
-    const existingClient = await db.client.findUnique({
+    const existingClient = await db.client.findFirst({
       where: { plate, isActive: true },
     });
 
@@ -481,7 +509,7 @@ export async function calculateTotalFee(clientData: HourlyClientColumns) {
     const roundedHours = Math.ceil(diffInHours);
 
     // Asegúrate de que el máximo sea 3 horas
-    const hoursToCharge = Math.min(roundedHours, 3);
+    // const hoursToCharge = Math.min(roundedHours, 3);
 
     // Obtiene la tarifa del cliente
     const fee = await db.fee.findFirst({
@@ -498,7 +526,7 @@ export async function calculateTotalFee(clientData: HourlyClientColumns) {
     }
 
     // Calcula el monto total sin decimales
-    const totalAmount = Math.floor(hoursToCharge * fee.price);
+    const totalAmount = Math.floor(roundedHours * fee.price);
 
     // Actualiza la hora de salida del cliente en la base de datos
     await db.client.update({
@@ -536,20 +564,18 @@ export async function getPaidDetails(clientData: HourlyClientColumns) {
     const exitDate = DateTime.now().setZone("America/Bogota");
 
     // Calcula la diferencia en horas y minutos
-    const diffInMilliseconds = exitDate.diff(
-      entryDate,
-      "milliseconds"
-    ).milliseconds;
-    const diffInHours = Math.floor(diffInMilliseconds / (1000 * 60 * 60)); // Horas completas
-    const diffInMinutes = Math.floor(
-      (diffInMilliseconds % (1000 * 60 * 60)) / (1000 * 60)
-    ); // Minutos restantes
+    const diffInHoursAndMinutes = exitDate.diff(entryDate, [
+      "hours",
+      "minutes",
+    ]);
+    const diffInHours = Math.floor(diffInHoursAndMinutes.hours);
+    const diffInMinutes = Math.floor(diffInHoursAndMinutes.minutes);
 
     // Redondea hacia arriba a la hora completa más cercana si son más de 30 minutos
     const roundedHours = diffInMinutes > 30 ? diffInHours + 1 : diffInHours;
 
     // Asegúrate de que el máximo sea 3 horas
-    const hoursToCharge = Math.min(roundedHours, 3);
+    // const hoursToCharge = Math.min(roundedHours, 3);
 
     // Obtiene la tarifa del cliente
     const fee = await db.fee.findFirst({
@@ -558,6 +584,9 @@ export async function getPaidDetails(clientData: HourlyClientColumns) {
         vehicleTypeId: clientData.vehicleTypeId,
         feeType: "HOURLY",
         parkingLotId: loggedUser?.parkingLotId!,
+      },
+      include: {
+        clientType: true,
       },
     });
 
@@ -569,10 +598,11 @@ export async function getPaidDetails(clientData: HourlyClientColumns) {
     }
 
     // Calcula el monto total sin decimales
-    const totalAmount = Math.floor(hoursToCharge * fee.price);
+    // const totalAmount = Math.floor(hoursToCharge * fee.price);
+    const totalAmount = Math.floor(roundedHours * fee.price);
 
     // Formatea el tiempo de estancia en horas y minutos
-    const stayDuration = `${hoursToCharge} horas ${diffInMinutes} minutos`;
+    const stayDuration = `${diffInHours} horas ${diffInMinutes} minutos`;
 
     return {
       stayDuration,
