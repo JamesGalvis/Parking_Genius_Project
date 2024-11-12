@@ -66,12 +66,6 @@ import { DateTime } from 'luxon';
 
 export async function getDailyChartData() {
   const loggedUser = await currentUser();
-  
-  // const startDate = new Date();
-  // startDate.setHours(0, 0, 0, 0); // Comienza a las 4:00am
-  
-  // const endDate = new Date();
-  // endDate.setHours(23, 59, 59, 999); // Termina a las 11:59pm (cubre hasta las 12:00am)
 
   // Crear la fecha de inicio en la zona horaria de Colombia (4:00 am)
   const startDate = DateTime.now()

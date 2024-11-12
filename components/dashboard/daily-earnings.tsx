@@ -60,21 +60,23 @@ export function DailyEarnings({ earningData, chartData }: DailyEarningsProps) {
   return (
     <div>
       <Card className="dark:bg-muted/20 bg-muted-foreground/5">
-        <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 md-plus:flex-row">
-          <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-            <div className="text-sm text-muted-foreground">
-              Ganancias Totales del Día
-            </div>
-            <div className="flex items-baseline gap-2">
-              <CardTitle className="text-4xl font-bold">
-                {formatToCOP(totalEarnings)}
-              </CardTitle>
-            </div>
-            <div className="text-sm text-muted-foreground">
-              Hoy, {formattedDate}
+        <CardHeader className="flex flex-wrap flex-row justify-between space-y-0 p-0">
+          <div className="flex flex-col justify-center gap-1 px-6 py-5 sm:py-6 flex-1 border-b select-none">
+            <div className="flex flex-1 flex-col justify-center gap-1 sm:min-w-[370px] min-w-full w-full sm:w-fit">
+              <div className="text-sm text-muted-foreground">
+                Ganancias Totales del Día
+              </div>
+              <div className="flex items-baseline gap-2">
+                <CardTitle className="text-4xl font-bold">
+                  {formatToCOP(totalEarnings)}
+                </CardTitle>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Hoy, {formattedDate}
+              </div>
             </div>
           </div>
-          <div className="flex md-plus:min-w-[400px]">
+          <div className="flex sm:min-w-[400px] xl:max-w-[520px] min-w-full flex-1 border-b">
             <EarningsCard
               title="Clientes por Hora"
               totalEarnings={hourlyEarnings}
@@ -159,7 +161,7 @@ interface EarningsCard {
 
 function EarningsCard({ title, totalEarnings, clientCounts }: EarningsCard) {
   return (
-    <div className="flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l dark:bg-muted/50 bg-muted-foreground/10 sm:border-l sm:border-t-0 sm:px-8 sm:py-6">
+    <div className="flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l dark:bg-muted/50 bg-muted-foreground/10 sm:border-l md-plus:border-t-0 sm:px-8 sm:py-6">
       <span className="text-xs text-muted-foreground">{title}</span>
       <span className="text-lg font-bold leading-none sm:text-3xl">
         {formatToCOP(totalEarnings)}
