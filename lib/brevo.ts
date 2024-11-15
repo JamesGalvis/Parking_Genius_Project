@@ -50,7 +50,7 @@ export async function monthlyPaymentEmail(
                 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
                 body { font-family: 'Roboto', sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; color: #333; }
                 .container { width: 100%; max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; }
-                h1 { text-align: center; color: #007bff; font-size: 28px; font-weight: 700; margin-bottom: 20px; }
+                h1 { text-align: start; color: #555; font-size: 28px; font-weight: 700; margin-bottom: 20px; }
                 p { line-height: 1.6; color: #555; font-size: 16px; }
                 .details { margin: 20px 0; padding: 10px; background-color: #f9f9f9; border-radius: 8px; }
                 .details p { margin: 8px 0; font-size: 16px; color: #333; }
@@ -76,11 +76,7 @@ export async function monthlyPaymentEmail(
 
                 <div class="footer">
                     <p>Atentamente,</p>
-                    <p><strong>Parking NoA</strong></p>
-                    <p>Teléfono: +57 123 456 7890</p>
-                    <p>Email: contacto@parkingnoa.com</p>
-                    <p>Síguenos en nuestras redes sociales:</p>
-                    <p><a href="https://facebook.com/parkingnoa">Facebook</a> | <a href="https://instagram.com/parkingnoa">Instagram</a></p>
+                    <p><strong>${parkingName}</strong></p>
                 </div>
             </div>
         </body>
@@ -111,7 +107,7 @@ export async function sendEmployeeCredentialsEmail(
                 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
                 body { font-family: 'Roboto', sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; color: #333; }
                 .container { width: 100%; max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; }
-                h1 { text-align: center; color: #007bff; font-size: 28px; font-weight: 700; margin-bottom: 20px; }
+                h1 { text-align: start; color: #555; font-size: 28px; font-weight: 700; margin-bottom: 20px; }
                 p { line-height: 1.6; color: #555; font-size: 16px; }
                 .credentials { margin: 20px 0; padding: 10px; background-color: #f9f9f9; border-radius: 8px; }
                 .credentials p { margin: 8px 0; font-size: 16px; color: #333; }
@@ -133,15 +129,9 @@ export async function sendEmployeeCredentialsEmail(
 
                 <p>Por razones de seguridad, te recomendamos que cambies tu contraseña después de iniciar sesión por primera vez.</p>
 
-                <p>Haz clic en el siguiente enlace para iniciar sesión en tu cuenta:</p>
-                <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/sign-in" class="button">Acceder a Mi Cuenta</a></p>
-
                 <div class="footer">
                     <p>Atentamente,</p>
                     <p><strong>Equipo de ${parkingName}</strong></p>
-                    <p>Teléfono: +57 123 456 7890</p>
-                    <p>Email: soporte@parkingenius.com</p>
-                    <p>Sitio web: <a href="https://www.parkingenius.com">www.parkingenius.com</a></p>
                 </div>
             </div>
         </body>

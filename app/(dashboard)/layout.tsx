@@ -4,12 +4,20 @@ import { cookies } from "next/headers";
 import { AppSidebar } from "@/components/navigation/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { MainHeader } from "@/components/common/main-header";
+import { currentUser } from "@/lib/auth-user";
+import { redirect } from "next/navigation";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const loggedUser = await currentUser()
+
+  if (loggedUser?.role === "SuperAdmin" && !loggedUser.parkingLotId) {
+    redirect("/config")
+  }
+
   const cookieStore = cookies();
   const defaultOpen = cookieStore.get("sidebar:state")?.value === "true";
 

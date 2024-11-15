@@ -1,8 +1,8 @@
-// "use server"
+"use server";
 
-// import { currentUser } from "@/lib/auth-user"
-// import { db } from "@/lib/db"
-// import { revalidatePath } from "next/cache"
+import { currentUser } from "@/lib/auth-user";
+import { db } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 // export async function getVehicles() {
 //   try {
@@ -22,43 +22,71 @@
 //   }
 // }
 
-// export async function getParkingLotByUser() {
-//   try {
-//     const loggedUser = await currentUser()
+export async function getCurrentParkingLot() {
+  try {
+    const loggedUser = await currentUser();
 
-//     if (!loggedUser) {
-//       return null
-//     }
+    if (!loggedUser) {
+      return null;
+    }
 
-//     const existingParking = await db.parkingLot.findFirst({
-//       where: { users: { some: { id: loggedUser?.id! } } },
-//     })
+    const existingParking = await db.parkingLot.findFirst({
+      where: { id: loggedUser.parkingLotId! },
+    });
 
-//     if (!existingParking) return null
+    if (!existingParking) return null;
 
-//     return existingParking
-//   } catch {
-//     return null
-//   }
-// }
+    return existingParking;
+  } catch {
+    return null;
+  }
+}
 
-// export async function createParkingLot(name: string) {
-//   try {
-//     const loggedUser = await currentUser()
+export async function getParkingLotByUser() {
+  try {
+    const loggedUser = await currentUser();
 
-//     if (!loggedUser) {
-//       return { error: "Solicitud inválida." }
-//     }
+    if (!loggedUser) {
+      return null;
+    }
 
-//     await db.parkingLot.create({
-//       data: { name, users: { connect: { id: loggedUser.id } } },
-//     })
+    const existingParking = await db.parkingLot.findFirst({
+      where: { users: { some: { id: loggedUser?.id! } } },
+    });
 
-//     return { success: "Parqueadero creado." }
-//   } catch {
-//     return { error: "Algo salió mal en la creación del parqueadero." }
-//   }
-// }
+    if (!existingParking) return null;
+
+    return existingParking;
+  } catch {
+    return null;
+  }
+}
+
+export async function createParkingLot(name: string) {
+  try {
+    const loggedUser = await currentUser();
+
+    if (!loggedUser) {
+      return { error: "Solicitud inválida." };
+    }
+
+    const existingParking = await db.parkingLot.findFirst({
+      where: { name },
+    });
+
+    if (existingParking) {
+      return { error: "Ya existe un negocio con este nombre." };
+    }
+
+    await db.parkingLot.create({
+      data: { name, users: { connect: { id: loggedUser.id } } },
+    });
+
+    return { success: "Parqueadero creado." };
+  } catch {
+    return { error: "Algo salió mal en la creación del parqueadero." };
+  }
+}
 
 // export async function createCategory(
 //   name: string,

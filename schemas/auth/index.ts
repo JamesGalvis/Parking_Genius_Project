@@ -54,10 +54,6 @@ export const RegisterFormSchema = z.object({
       message: "Debe contener al menos 1 caracterer especial.",
     })
     .trim(),
-  userType: z.enum(["empleado", "administrador"], {
-    required_error: "Debes seleccionar un tipo de usuario",
-    invalid_type_error: "Tipo de usuario no válido",
-  }),
 });
 
 export const CompleteRegisterFormSchema = z.object({

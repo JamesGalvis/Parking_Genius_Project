@@ -18,19 +18,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FormWrapper } from "@/components/auth/form-wrapper";
+import { FormWrapper } from "./form-wrapper";
 import { PasswordInput } from "@/components/auth/password-input";
 import { RegisterFormSchema } from "@/schemas/auth";
 import { FormStateMessage } from "@/components/auth/form-state-message";
 import { register } from "@/actions/auth";
-import { Label } from "../ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
 
 export function SignUpForm() {
   const [error, setError] = useState<string | undefined>(undefined);
@@ -43,7 +37,6 @@ export function SignUpForm() {
       phone: "",
       email: "",
       password: "",
-      userType: undefined, // Se agrega para manejar el array de roles
     },
   });
 
@@ -68,12 +61,12 @@ export function SignUpForm() {
   };
 
   return (
-    <div className="grid grid-cols-2 bg-zinc-900 rounded-2xl">
-      <div className="col-span-1 flex items-center justify-center mx-3 my-4">
+    <div className="lg:grid grid-cols-2 bg-zinc-900 lg:rounded-2xl h-full min-h-full max-lg:w-full overflow-y-auto">
+      <div className="col-span-1 flex items-center justify-center mx-3 my-4 max-lg:hidden">
         <Carrousel />
       </div>
 
-      <div className="col-span-1">
+      <div className="lg:col-span-1 w-full h-full flex items-center justify-center">
         <FormWrapper
           headerTitle="Crea tu cuenta"
           backButtonLabel="Ya tiene una cuenta? Iniciar sesión"
@@ -95,6 +88,7 @@ export function SignUpForm() {
                       <FormLabel>Nombre</FormLabel>
                       <FormControl>
                         <Input
+                          className="bg-background/60"
                           placeholder="Jhon Doe"
                           disabled={isSubmitting}
                           {...field}
@@ -106,17 +100,20 @@ export function SignUpForm() {
                 />
 
                 <FormField
-                  name="phone"
                   control={form.control}
+                  name="phone"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Teléfono</FormLabel>
                       <FormControl>
-                        <Input
-                          type="tel"
-                          placeholder="Número de teléfono"
-                          disabled={isSubmitting}
-                          {...field}
+                        <PhoneInput
+                          className="bg-background/60 rounded-xl"
+                          defaultCountry="co"
+                          hideDropdown
+                          value={field.value}
+                          onChange={(phone) => {
+                            field.onChange(phone);
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -126,36 +123,6 @@ export function SignUpForm() {
               </div>
 
               <FormField
-                control={form.control}
-                name="userType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo de usuario</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="h-14 rounded-xl pl-4 bg-zinc-700">
-                          <SelectValue placeholder="Selecciona el tipo de usuario" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="empleado">Empleado</SelectItem>
-                        <SelectItem value="administrador">
-                          Administrador
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      Selecciona tu rol en la plataforma.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
                 name="email"
                 control={form.control}
                 render={({ field }) => (
@@ -163,6 +130,7 @@ export function SignUpForm() {
                     <FormLabel>Correo electrónico</FormLabel>
                     <FormControl>
                       <Input
+                        className="bg-background/60"
                         type="email"
                         placeholder="ej. jhon@gmail.com"
                         disabled={isSubmitting}
@@ -182,6 +150,7 @@ export function SignUpForm() {
                     <FormLabel>Contraseña</FormLabel>
                     <FormControl>
                       <PasswordInput
+                        className="bg-background/60"
                         field={field}
                         isSubmitting={isSubmitting}
                       />

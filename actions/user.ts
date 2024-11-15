@@ -31,22 +31,3 @@ export const getUserById = async (id?: string) => {
     return null;
   }
 };
-
-export async function getUsers(currentUserId: string) {
-  try {
-    const users = await db.user.findMany({
-      where: {
-        role: {
-          not: "SuperAdmin",
-        },
-        id: {
-          not: currentUserId,
-        },
-      },
-    });
-
-    return users;
-  } catch {
-    return [];
-  }
-}

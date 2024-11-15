@@ -19,9 +19,11 @@ export function CurrentYearEarningsGraphs({
       <YearlyEarningsChart chartData={yearEarnings} />
       <div className="flex md:flex-wrap max-md:flex-col items-center gap-4">
         <YearlyEarningsAreaChart chartData={yearEarnings} />
-        <YearlyPieChart
-          yearlyClientsCountByCategory={yearlyClientsByCategory}
-        />
+        {yearlyClientsByCategory.length > 0 && (
+          <YearlyPieChart
+            yearlyClientsCountByCategory={yearlyClientsByCategory}
+          />
+        )}
       </div>
     </div>
   );

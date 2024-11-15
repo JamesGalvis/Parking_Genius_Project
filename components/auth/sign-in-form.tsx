@@ -9,7 +9,6 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import Carrousel from "./carrousel";
 import { Checkbox } from "@/components/ui/checkbox";
-import Image from "next/image";
 
 import {
   Form,
@@ -21,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FormWrapper } from "@/components/auth/form-wrapper";
+import { FormWrapper } from "./form-wrapper";
 import { PasswordInput } from "@/components/auth/password-input";
 import { LoginFormSchema } from "@/schemas/auth";
 import { FormStateMessage } from "@/components/auth/form-state-message";
@@ -66,11 +65,12 @@ export function SignInForm() {
   };
 
   return (
-    <div className="grid grid-cols-2 bg-zinc-900 rounded-2xl ">
-      <div className="col-span-1 flex items-center justify-center mx-3 my-4 ">
+    <div className="xl:grid grid-cols-2 bg-zinc-900 rounded-2xl h-full max-xl:size-full">
+      <div className="col-span-1 flex items-center justify-center mx-3 my-4 max-xl:hidden">
         <Carrousel />
       </div>
-      <div>
+
+      <div className="flex items-center justify-center size-full">
         <FormWrapper
           headerTitle="Bienvenido a ParkGenius"
           headerSubtitle="Por favor inicia sesión para continuar"
@@ -93,7 +93,7 @@ export function SignInForm() {
                           placeholder="ej. jhon@gmail.com"
                           disabled={isSubmitting}
                           {...field}
-                          className="border border-zinc-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 transition duration-200"
+                          className="border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 transition duration-200 bg-background/60"
                         />
                       </FormControl>
                       <FormMessage />
@@ -110,7 +110,7 @@ export function SignInForm() {
                         <PasswordInput
                           field={field}
                           isSubmitting={isSubmitting}
-                          className="border border-zinc-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 transition duration-200"
+                          className="border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 transition duration-200 bg-background/60"
                         />
                       </FormControl>
                       <FormMessage />

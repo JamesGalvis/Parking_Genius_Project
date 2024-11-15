@@ -20,7 +20,7 @@ export function FormWrapper({
   backButtonLabel,
 }: FormWrapperProps) {
   return (
-    <div className="flex flex-col items-start xs:w-[400px] sm:w-[600px] xs:px-8  py-6 space-y-1.5 my-4">
+    <div className="flex flex-col items-start xs:w-[500px] sm:w-[600px] xs:px-8 px-4 py-6 space-y-1.5 my-4">
       <WrapperHeader title={headerTitle} subtitle={headerSubtitle} />
 
       <BackButton href={backButtonHref} label={backButtonLabel} />

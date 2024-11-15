@@ -37,8 +37,6 @@ model ParkingLot {
   clientTypes        ClientType[] // Relación con categorías de vehículos
   vehicleTypes       VehicleType[] // Relación con categorías de vehículos
   fees               Fee[]
-  linkCode           String?
-  codeValidationTime DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -134,7 +132,7 @@ model Client {
 // Modelo de Tipo de Cliente
 model ClientType {
   id   String @id @default(cuid())
-  name String @unique // Ejemplo: "Estudiante", "Particular"
+  name String  // Ejemplo: "Estudiante", "Particular"
 
   parkingLotId String
   parkingLot   ParkingLot @relation(fields: [parkingLotId], references: [id], onDelete: Cascade)
@@ -149,7 +147,7 @@ model ClientType {
 // Modelo de Tipo de Vehículo
 model VehicleType {
   id   String @id @default(cuid())
-  name String @unique // Ejemplo: "Automóvil", "Motocicleta", "Camioneta"
+  name String  // Ejemplo: "Automóvil", "Motocicleta", "Camioneta"
 
   parkingLotId String
   parkingLot   ParkingLot @relation(fields: [parkingLotId], references: [id], onDelete: Cascade)

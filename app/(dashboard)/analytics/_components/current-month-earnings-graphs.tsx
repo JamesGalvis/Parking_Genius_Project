@@ -24,9 +24,9 @@ export function CurrentMonthEarningsGraphs({
       <MonthlyEarningsChart chartData={monthlyEarnings} />
       <div className="flex md:flex-wrap max-md:flex-col items-center gap-4">
         <MonthlyEarningsAreaChart chartData={monthlyEarnings} />
-        <MonthlyPieChart
+        {monthlyClientsCountByCategory.length > 0 && <MonthlyPieChart
           monthlyClientsCountByCategory={monthlyClientsCountByCategory}
-        />
+        />}
       </div>
     </div>
   );

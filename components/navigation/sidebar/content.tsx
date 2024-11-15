@@ -19,9 +19,10 @@ interface ContentProps {
     hourlyClientsCount: number;
   };
   isAdmin: boolean;
+  hasFees: boolean;
 }
 
-export function Content({ isAdmin, clientsCount }: ContentProps) {
+export function Content({ isAdmin, clientsCount, hasFees }: ContentProps) {
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -33,30 +34,32 @@ export function Content({ isAdmin, clientsCount }: ContentProps) {
         </SidebarGroupContent>
       </SidebarGroup>
 
-      <SidebarGroup>
-        <SidebarGroupLabel>Gestión de Clientes</SidebarGroupLabel>
-        <SidebarGroupContent>
-          <SidebarMenu>
-            {employeeRoutes.map(({ url, icon: Icon, title }) => {
-              const count =
-                title === "Mensuales"
-                  ? clientsCount.monthlyClientsCount
-                  : clientsCount.hourlyClientsCount;
+      {hasFees && (
+        <SidebarGroup>
+          <SidebarGroupLabel>Gestión de Clientes</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {employeeRoutes.map(({ url, icon: Icon, title }) => {
+                const count =
+                  title === "Mensuales"
+                    ? clientsCount.monthlyClientsCount
+                    : clientsCount.hourlyClientsCount;
 
-              return (
-                <RouteItem
-                  key={url}
-                  title={title}
-                  url={url}
-                  Icon={Icon}
-                  showMenuBadge
-                  menuBadgeLabel={count}
-                />
-              );
-            })}
-          </SidebarMenu>
-        </SidebarGroupContent>
-      </SidebarGroup>
+                return (
+                  <RouteItem
+                    key={url}
+                    title={title}
+                    url={url}
+                    Icon={Icon}
+                    showMenuBadge
+                    menuBadgeLabel={count}
+                  />
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      )}
 
       <SidebarGroup className={cn(!isAdmin && "hidden")}>
         <SidebarGroupLabel>Administración</SidebarGroupLabel>

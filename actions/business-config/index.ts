@@ -14,7 +14,11 @@ import {
 
 export async function getVehicleTypes() {
   try {
-    return await db.vehicleType.findMany();
+    const loggedUser = await currentUser();
+
+    return await db.vehicleType.findMany({
+      where: { parkingLotId: loggedUser?.parkingLotId! },
+    });
   } catch {
     return [];
   }
@@ -22,7 +26,11 @@ export async function getVehicleTypes() {
 
 export async function getClientTypes() {
   try {
-    return await db.clientType.findMany();
+    const loggedUser = await currentUser();
+
+    return await db.clientType.findMany({
+      where: { parkingLotId: loggedUser?.parkingLotId! },
+    });
   } catch {
     return [];
   }
@@ -31,6 +39,7 @@ export async function getClientTypes() {
 export async function getFees() {
   try {
     const role = await currentRole();
+    const loggedUser = await currentUser();
 
     const isAdmin = role === "Admin" || role === "SuperAdmin";
 
@@ -39,6 +48,9 @@ export async function getFees() {
     }
 
     const fees = await db.vehicleType.findMany({
+      where: {
+        parkingLotId: loggedUser?.parkingLotId!,
+      },
       include: {
         fees: {
           include: {
@@ -101,8 +113,8 @@ export async function createVehicleType(
 
     const { name } = result.data;
 
-    const existingVehicleType = await db.vehicleType.findUnique({
-      where: { name },
+    const existingVehicleType = await db.vehicleType.findFirst({
+      where: { name, parkingLotId: loggedUser?.parkingLotId! },
     });
 
     if (existingVehicleType) {
@@ -122,7 +134,8 @@ export async function createVehicleType(
 
     revalidatePath("/business-configuration");
     return { success: "Tipo de vehiculo creado." };
-  } catch {
+  } catch (error) {
+    console.log(error)
     return { error: "Algo salió mal en el proceso." };
   }
 }
@@ -188,8 +201,8 @@ export async function createClientType(
 
     const { name } = result.data;
 
-    const existingClientType = await db.clientType.findUnique({
-      where: { name },
+    const existingClientType = await db.clientType.findFirst({
+      where: { name, parkingLotId: loggedUser?.parkingLotId! },
     });
 
     if (existingClientType) {
@@ -274,7 +287,11 @@ export async function createFees(values: z.infer<typeof CreateFeeSchema>) {
     const { vehicleTypeId, clientTypeId, hourlyFee, monthlyFee } = result.data;
 
     const existingFee = await db.fee.findFirst({
-      where: { vehicleTypeId, clientTypeId },
+      where: {
+        vehicleTypeId,
+        clientTypeId,
+        parkingLotId: loggedUser?.parkingLotId!,
+      },
     });
 
     if (existingFee) {
@@ -328,6 +345,7 @@ export async function createFees(values: z.infer<typeof CreateFeeSchema>) {
       },
     });
 
+    revalidatePath("/");
     revalidatePath("/business-configuration");
     return { success: "Tarifas creadas." };
   } catch {
@@ -338,6 +356,7 @@ export async function createFees(values: z.infer<typeof CreateFeeSchema>) {
 export async function deleteFees(data: FeeColumns) {
   try {
     const role = await currentRole();
+    const loggedUser = await currentUser();
 
     const isAdmin = role === "Admin" || role === "SuperAdmin";
 
@@ -348,7 +367,7 @@ export async function deleteFees(data: FeeColumns) {
     const { clientTypeId, vehicleTypeId } = data;
 
     const existingClientType = await db.clientType.findUnique({
-      where: { id: clientTypeId },
+      where: { id: clientTypeId, parkingLotId: loggedUser?.parkingLotId! },
       include: {
         clients: true,
       },
@@ -384,6 +403,7 @@ export async function updateFees(
 
   try {
     const role = await currentRole();
+    const loggedUser = await currentUser();
 
     const isAdmin = role === "Admin" || role === "SuperAdmin";
 
@@ -394,7 +414,11 @@ export async function updateFees(
     const { vehicleTypeId, clientTypeId, hourlyFee, monthlyFee } = result.data;
 
     const existingFee = await db.fee.findFirst({
-      where: { vehicleTypeId, clientTypeId },
+      where: {
+        vehicleTypeId,
+        clientTypeId,
+        parkingLotId: loggedUser?.parkingLotId!,
+      },
     });
 
     if (!existingFee) {

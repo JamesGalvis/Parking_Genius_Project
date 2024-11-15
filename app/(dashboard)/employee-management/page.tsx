@@ -5,7 +5,7 @@ import { es } from "date-fns/locale";
 import { Heading } from "@/components/common/heading";
 import { CreateEmployeeTrigger } from "./_components/create-employee-trigger";
 import { DataTable } from "@/components/common/data-table";
-import { getUsers } from "@/actions/user";
+import { getUsers } from "@/actions/users";
 import { columns, UserColumns } from "./_components/columns";
 import { currentUser } from "@/lib/auth-user";
 import { roles } from "@/constants";
