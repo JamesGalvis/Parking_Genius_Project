@@ -72,8 +72,8 @@ export function CellAction({ data }: CellActionProps) {
   return (
     <>
       <AlertModal
-        title="¿Está seguro de eliminar este tipo de cliente?"
-        description="Esta acción no se puede deshacer. Esto eliminará permanentemente el tipo de cliente y todas sus tarifas asociadas."
+        title="¿Está seguro de eliminar esta tarifa?"
+        description="Esta acción no se puede deshacer. Esto eliminará permanentemente la tarifa."
         isLoading={isLoading}
         isOpen={openAlertConfirmation}
         onClose={() => setOpenAlertConfirmation(false)}

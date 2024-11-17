@@ -7,19 +7,19 @@ import { LoginFormSchema } from "./schemas/auth";
 import { getUserByEmail } from "./actions/user";
 
 const authConfig: NextAuthConfig = {
-  secret: process.env.AUTH_SECRET, // Agrega esta línea
+  secret: process.env.AUTH_SECRET,
   providers: [
-    // Google({
-    //   clientId: process.env.GOOGLE_CLIENT_ID,
-    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    //   authorization: {
-    //     params: {
-    //       prompt: "consent",
-    //       access_type: "offline",
-    //       response_type: "code",
-    //     },
-    //   },
-    // }),
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+    }),
     Credentials({
       authorize: async (credentials) => {
         const result = LoginFormSchema.safeParse(credentials);
@@ -30,10 +30,17 @@ const authConfig: NextAuthConfig = {
           const user = await getUserByEmail(email);
 
           if (!user || !user.password) {
-            return null;
+            throw new Error("Credenciales inválidas!");
           }
 
           const passwordMatch = await bcrypt.compare(password, user.password);
+
+          if (!passwordMatch) {
+            throw new Error("Credenciales inválidas");
+          }
+          if (!user.emailVerified) {
+            throw new Error("Usuario no Verificado");
+          }
 
           if (passwordMatch) return user;
         }

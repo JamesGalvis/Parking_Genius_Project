@@ -36,7 +36,7 @@ export async function login(credentials: z.infer<typeof LoginFormSchema>) {
         case "CredentialsSignin":
           return { error: "Credenciales inválidas!" };
         default:
-          return { error: "Algo salió mal en el proceso!" };
+          return { error: error.cause?.err?.message };
       }
     }
 
