@@ -41,12 +41,6 @@ export async function getFees() {
     const role = await currentRole();
     const loggedUser = await currentUser();
 
-    const isAdmin = role === "Admin" || role === "SuperAdmin";
-
-    if (!isAdmin) {
-      return [];
-    }
-
     const fees = await db.vehicleType.findMany({
       where: {
         parkingLotId: loggedUser?.parkingLotId!,

@@ -23,6 +23,7 @@ interface ContentProps {
 }
 
 export function Content({ isAdmin, clientsCount, hasFees }: ContentProps) {
+  console.log(hasFees)
   return (
     <SidebarContent>
       <SidebarGroup>
