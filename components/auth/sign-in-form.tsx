@@ -72,7 +72,7 @@ export function SignInForm() {
 
       <div className="flex items-center justify-center size-full">
         <FormWrapper
-          headerTitle="Bienvenido a ParkGenius"
+          headerTitle="Iniciar Sesión"
           headerSubtitle="Por favor inicia sesión para continuar"
           backButtonHref="/auth/register"
           backButtonLabel="No tienes una cuenta? Regístrate"
@@ -117,12 +117,6 @@ export function SignInForm() {
                     </FormItem>
                   )}
                 />
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <Checkbox /> <small className="mx-2">Recuerdame</small>
-                  </div>
-                  <small className="underline">Olvidaste tu contraseña?</small>
-                </div>
 
                 <FormStateMessage type="Success" message={success} />
                 <FormStateMessage type="Error" message={error || urlError} />
