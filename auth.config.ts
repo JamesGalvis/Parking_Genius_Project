@@ -38,9 +38,6 @@ const authConfig: NextAuthConfig = {
           if (!passwordMatch) {
             throw new Error("Credenciales inválidas");
           }
-          if (!user.emailVerified) {
-            throw new Error("Usuario no Verificado");
-          }
 
           if (passwordMatch) return user;
         }
