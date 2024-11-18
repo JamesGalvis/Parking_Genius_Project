@@ -23,7 +23,7 @@ export function Social() {
         </div>
         <div className="relative flex justify-center">
           <span className="text-sm bg-white dark:bg-transparent px-2 ">
-            or
+            o
           </span>
         </div>
       </div>
