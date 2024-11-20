@@ -61,7 +61,7 @@ export async function monthlyPaymentEmail(
         </head>
         <body>
             <div class="container">
-                <h1>Confirmación de Pago de Mensualidad</h1>
+                <h1>Confirmación de Servicio Mensual</h1>
                 <p>Estimado/a ${name},</p>
                 <p>¡Gracias por confiar en Parking NoA! Nos complace informarte que hemos recibido tu pago de mensualidad. A continuación, encontrarás los detalles de tu servicio.</p>
 
