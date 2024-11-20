@@ -27,7 +27,7 @@ export function FormWrapper({
 
       <div className="w-full">{children}</div>
 
-      <div className="space-y-5 w-full">{showSocial && <Social />}</div>
+      {/* <div className="space-y-5 w-full">{showSocial && <Social />}</div> */}
     </div>
   );
 }
